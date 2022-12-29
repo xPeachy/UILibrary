@@ -5,7 +5,7 @@ local ThemeManager = {} do
 
     ThemeManager.Library = nil
     ThemeManager.BuiltInThemes = {
-        ['Shadow Hub [Red]'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"ff0000","BackgroundColor":"1c1c1c","OutlineColor":"3c3c3c"}') },
+        ['Shadow Hub'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"ff0000","BackgroundColor":"1c1c1c","OutlineColor":"3c3c3c"}') },
         ['Dracula'] = { 2, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"232533","AccentColor":"6271a5","BackgroundColor":"1b1c27","OutlineColor":"7c82a7"}') },
         ['Bitch Bot'] = { 3, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"1e1e1e","AccentColor":"7e48a3","BackgroundColor":"232323","OutlineColor":"141414"}') },
         ['Kiriot Hub'] = { 4, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"30333b","AccentColor":"ffaa00","BackgroundColor":"1a1c20","OutlineColor":"141414"}') },
