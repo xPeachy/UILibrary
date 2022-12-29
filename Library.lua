@@ -1,14 +1,8 @@
-if game:GetService("CoreGui"):FindFirstChild("ShadowHub") then
-    game:GetService("CoreGui"):FindFirstChild("ShadowHub"):Destroy()
-end
-
 local InputService = game:GetService('UserInputService');
 local TextService = game:GetService('TextService');
 local TweenService = game:GetService('TweenService');
 local CoreGui = game:GetService('CoreGui');
-local RunService = game:GetService('RunService')
-local GuiService = game:GetService('GuiService')
-local RenderStepped = RunService.RenderStepped;
+local RenderStepped = game:GetService('RunService').RenderStepped;
 local LocalPlayer = game:GetService('Players').LocalPlayer;
 local Mouse = LocalPlayer:GetMouse();
 
@@ -19,7 +13,6 @@ ProtectGui(ScreenGui);
 
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 ScreenGui.Parent = CoreGui;
-ScreenGui.Name = "ShadowHub"
 
 local Toggles = {};
 local Options = {};
