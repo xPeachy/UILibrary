@@ -2969,7 +2969,7 @@ function Library:CreateWindow(...)
                     local displayFrame = colorPicker.DisplayFrame
                     local tabFrame = displayFrame and displayFrame:findFirstAncestor('TabFrame')
 
-                    if tabFrame and tabFrame.Visible and Library:IsMouseOverFrame(colorPicker.DisplayFrame) then
+                    if tabFrame.Visible and Library:IsMouseOverFrame(colorPicker.DisplayFrame) then
                         HoveringColorPicker = colorPicker
                         break
                     end
@@ -2994,4 +2994,5 @@ function Library:CreateWindow(...)
 
     return Window;
 end;
-return Library;
+
+return Library
