@@ -2950,6 +2950,25 @@ function Library:CreateWindow(...)
 
         local oIcon = Mouse.Icon;
         local State = InputService.MouseIconEnabled;
+
+        local Cursor = Drawing.new('Triangle');
+        Cursor.Thickness = 1;
+        Cursor.Filled = true;
+
+        while Outer.Visible and ScreenGui.Parent do
+            local mPos = InputService:GetMouseLocation()
+
+            Cursor.Color = Library.AccentColor;
+            Cursor.PointA = Vector2.new(mPos.X, mPos.Y);
+            Cursor.PointB = Vector2.new(mPos.X, mPos.Y) + Vector2.new(6, 14);
+            Cursor.PointC = Vector2.new(mPos.X, mPos.Y) + Vector2.new(-6, 14);
+
+            Cursor.Visible = not InputService.MouseIconEnabled;
+
+            RenderStepped:Wait();
+        end;
+
+        Cursor:Remove();
     end
 
     Library:GiveSignal(InputService.InputBegan:Connect(function(Input, Processed)
