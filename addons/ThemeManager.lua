@@ -1,8 +1,6 @@
 local httpService = game:GetService('HttpService')
 local ThemeManager = {} do
     ThemeManager.Folder = 'LinoriaLibSettings'
-    -- if not isfolder(ThemeManager.Folder) then makefolder(ThemeManager.Folder) end
-
     ThemeManager.Library = nil
     ThemeManager.BuiltInThemes = {
         ['Default'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"181825","AccentColor":"b35959","BackgroundColor":"16161f","OutlineColor":"323232"}') },
@@ -22,8 +20,6 @@ local ThemeManager = {} do
         local data = customThemeData or self.BuiltInThemes[theme]
 
         if not data then return end
-
-        -- custom themes are just regular dictionaries instead of an array with { index, dictionary }
 
         local scheme = data[2]
         for idx, col in next, customThemeData or scheme do
@@ -181,8 +177,7 @@ local ThemeManager = {} do
         for i = 1, #list do
             local file = list[i]
             if file:sub(-5) == '.json' then
-                -- i hate this but it has to be done ...
-
+                
                 local pos = file:find('.json', 1, true)
                 local char = file:sub(pos, pos)
 
@@ -206,9 +201,6 @@ local ThemeManager = {} do
 
     function ThemeManager:BuildFolderTree()
         local paths = {}
-
-        -- build the entire tree if a path is like some-hub/phantom-forces
-        -- makefolder builds the entire tree on Synapse X but not other exploits
 
         local parts = self.Folder:split('/')
         for idx = 1, #parts do
