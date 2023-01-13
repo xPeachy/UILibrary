@@ -4,7 +4,7 @@ local ThemeManager = {} do
     ThemeManager.Folder = 'LinoriaLibSettings'
     ThemeManager.Library = nil
     ThemeManager.BuiltInThemes = {
-        ['Shadow Hub Default Theme [Green]'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"00ff8b","BackgroundColor":"1c1c1c","OutlineColor":"3c3c3c"}') },
+        ['Shadow Hub Default Theme'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"ffffff","BackgroundColor":"141414","OutlineColor":"3c3c3c"}') },
     }
 
     function ThemeManager:ApplyTheme(theme)
