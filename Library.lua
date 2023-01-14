@@ -1,3 +1,20 @@
+-- // [ Linoria Edit Lib ]
+
+if game:GetService("CoreGui"):FindFirstChild("Shadow") then
+    game:GetService("CoreGui"):FindFirstChild("Shadow"):Destroy()
+end
+
+if game.CoreGui:FindFirstChild("ToggleUI") then
+	game.CoreGui:FindFirstChild("ToggleUI"):Destroy()
+end
+
+local ToggleUI = Instance.new("ScreenGui")
+local ToggleButton = Instance.new("TextButton")
+local ToggleButtonHUI = Instance.new("UICorner")
+ToggleUI.Name = "ToggleUI"
+ToggleUI.Parent = game.CoreGui
+ToggleUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
 local InputService = game:GetService('UserInputService');
 local TextService = game:GetService('TextService');
 local TweenService = game:GetService('TweenService');
@@ -11,11 +28,13 @@ local Mouse = LocalPlayer:GetMouse();
 local ProtectGui = protectgui or (syn and syn.protect_gui) or (function() end);
 
 local ScreenGui = Instance.new('ScreenGui');
-ProtectGui(ScreenGui);
-
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global;
 ScreenGui.Parent = CoreGui;
-
+ScreenGui.Name = "Kenei"
+ProtectGui(ScreenGui);
+if syn then
+    ProtectGui(ScreenGui);
+end
 local Toggles = {};
 local Options = {};
 
@@ -29,9 +48,9 @@ local Library = {
     HudRegistry = {};
 
     FontColor = Color3.fromRGB(255, 255, 255);
-    MainColor = Color3.fromRGB(28, 28, 28);
+    MainColor = Color3.fromRGB(27, 27, 27);
     BackgroundColor = Color3.fromRGB(20, 20, 20);
-    AccentColor = Color3.fromRGB(0, 85, 255);
+    AccentColor = Color3.fromRGB(255, 255, 255);
     OutlineColor = Color3.fromRGB(50, 50, 50);
 
     Black = Color3.new(0, 0, 0);
@@ -279,6 +298,16 @@ function Library:RemoveFromRegistry(Instance)
 end;
 
 function Library:UpdateColorsUsingRegistry()
+    -- TODO: Could have an 'active' list of objects
+    -- where the active list only contains Visible objects.
+
+    -- IMPL: Could setup .Changed events on the AddToRegistry function
+    -- that listens for the 'Visible' propert being changed.
+    -- Visible: true => Add to active list, and call UpdateColors function
+    -- Visible: false => Remove from active list.
+
+    -- The above would be especially efficient for a rainbow menu color or live color-changing.
+
     for Idx, Object in next, Library.Registry do
         for Property, ColorIdx in next, Object.Properties do
             if type(ColorIdx) == 'string' then
@@ -291,15 +320,18 @@ function Library:UpdateColorsUsingRegistry()
 end;
 
 function Library:GiveSignal(Signal)
+    -- Only used for signals not attached to library instances, as those should be cleaned up on object destruction by Roblox
     table.insert(Library.Signals, Signal)
 end
 
 function Library:Unload()
+    -- Unload all of the signals
     for Idx = #Library.Signals, 1, -1 do
         local Connection = table.remove(Library.Signals, Idx)
         Connection:Disconnect()
     end
 
+     -- Call our unload callback, maybe to undo some hooks etc
     if Library.OnUnload then
         Library.OnUnload()
     end
@@ -1340,20 +1372,28 @@ do
             end);
         end
 
+        -- https://devforum.roblox.com/t/how-to-make-textboxes-follow-current-cursor-position/1368429/6
+        -- thank you nicemike40 :)
+
         local function Update()
             local PADDING = 5
             local reveal = Container.AbsoluteSize.X
 
             if not Box:IsFocused() or Box.TextBounds.X <= reveal - 2 * PADDING then
+                -- we aren't focused, or we fit so be normal
                 Box.Position = UDim2.new(0, PADDING, 0, 0)
             else
+                -- we are focused and don't fit, so adjust position
                 local cursor = Box.CursorPosition
                 if cursor ~= -1 then
+                    -- calculate pixel width of text from start to cursor
                     local subtext = string.sub(Box.Text, 1, cursor-1)
                     local width = TextService:GetTextSize(subtext, Box.TextSize, Box.Font, Vector2.new(math.huge, math.huge)).X
                     
+                    -- check if we're inside the box with the cursor
                     local currentCursorPos = Box.Position.X.Offset + width
 
+                    -- adjust if necessary
                     if currentCursorPos < PADDING then
                         Box.Position = UDim2.fromOffset(PADDING-width, 0)
                     elseif currentCursorPos > reveal - PADDING - 1 then
@@ -1494,7 +1534,7 @@ do
 
         ToggleRegion.InputBegan:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 and not Library:MouseIsOverOpenedFrame() then
-                Toggle:SetValue(not Toggle.Value)
+                Toggle:SetValue(not Toggle.Value) -- Why was it not like this from the start?
                 Library:AttemptSave();
             end;
         end);
@@ -1891,6 +1931,7 @@ do
 
             for _, Element in next, Scrolling:GetChildren() do
                 if not Element:IsA('UIListLayout') then
+                    -- Library:RemoveFromRegistry(Element);
                     Element:Destroy();
                 end;
             end;
@@ -2001,6 +2042,8 @@ do
             local Y = math.clamp(Count * 20, 0, MAX_DROPDOWN_ITEMS * 20) + 1;
             ListOuter.Size = UDim2.new(1, -8, 0, Y);
             Scrolling.CanvasSize = UDim2.new(0, 0, 0, (Count * 20) + 1);
+
+            -- ListOuter.Size = UDim2.new(1, -8, 0, (#Values * 20) + 2);
         end;
 
         function Dropdown:OpenDropdown()
@@ -2118,6 +2161,7 @@ do
     end;
 end;
 
+-- < Create other UI elements >
 do
     Library.NotificationArea = Library:Create('Frame', {
         BackgroundTransparency = 1;
@@ -2385,7 +2429,7 @@ function Library:CreateWindow(...)
     if type(Config.Title) ~= 'string' then Config.Title = 'No title' end
     
     if typeof(Config.Position) ~= 'UDim2' then Config.Position = UDim2.fromOffset(175, 50) end
-    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(550, 600) end
+    if typeof(Config.Size) ~= 'UDim2' then Config.Size = UDim2.fromOffset(550, 600) end -- 550 600
 
     if Config.Center then
         Config.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -2900,7 +2944,8 @@ function Library:CreateWindow(...)
                 Tab:ShowTab();
             end;
         end);
-        
+
+        -- This was the first tab added, so we show it by default.
         if #TabContainer:GetChildren() == 1 then
             Tab:ShowTab();
         end;
@@ -2924,25 +2969,6 @@ function Library:CreateWindow(...)
 
         local oIcon = Mouse.Icon;
         local State = InputService.MouseIconEnabled;
-
-        local Cursor = Drawing.new('Triangle');
-        Cursor.Thickness = 1;
-        Cursor.Filled = true;
-
-        while Outer.Visible and ScreenGui.Parent do
-            local mPos = InputService:GetMouseLocation()
-
-            Cursor.Color = Library.AccentColor;
-            Cursor.PointA = Vector2.new(mPos.X, mPos.Y);
-            Cursor.PointB = Vector2.new(mPos.X, mPos.Y) + Vector2.new(6, 14);
-            Cursor.PointC = Vector2.new(mPos.X, mPos.Y) + Vector2.new(-6, 14);
-
-            Cursor.Visible = not InputService.MouseIconEnabled;
-
-            RenderStepped:Wait();
-        end;
-
-        Cursor:Remove();
     end
 
     Library:GiveSignal(InputService.InputBegan:Connect(function(Input, Processed)
@@ -2962,7 +2988,7 @@ function Library:CreateWindow(...)
                     local displayFrame = colorPicker.DisplayFrame
                     local tabFrame = displayFrame and displayFrame:findFirstAncestor('TabFrame')
 
-                    if tabFrame.Visible and Library:IsMouseOverFrame(colorPicker.DisplayFrame) then
+                    if tabFrame and tabFrame.Visible and Library:IsMouseOverFrame(colorPicker.DisplayFrame) then
                         HoveringColorPicker = colorPicker
                         break
                     end
@@ -2988,4 +3014,4 @@ function Library:CreateWindow(...)
     return Window;
 end;
 
-return Library
+return Library;
