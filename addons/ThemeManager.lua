@@ -1,10 +1,10 @@
 local httpService = game:GetService('HttpService')
 local ThemeManager = {} do
-    
     ThemeManager.Folder = 'LinoriaLibSettings'
+
     ThemeManager.Library = nil
     ThemeManager.BuiltInThemes = {
-        ['Shadow Hub Default Theme'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"00c7ff","BackgroundColor":"141414","OutlineColor":"3c3c3c"}') },
+        ['Shadow Hub'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"141414","AccentColor":"00c7ff","BackgroundColor":"141414","OutlineColor":"3c3c3c"}') },
     }
 
     function ThemeManager:ApplyTheme(theme)
@@ -37,7 +37,7 @@ local ThemeManager = {} do
     end
 
     function ThemeManager:LoadDefault()
-        local theme = 'Default'
+        local theme = 'Color Gui 1'
         local content = isfile(self.Folder .. '/themes/default.txt') and readfile(self.Folder .. '/themes/default.txt')
 
         local isDefault = true
@@ -169,7 +169,7 @@ local ThemeManager = {} do
         for i = 1, #list do
             local file = list[i]
             if file:sub(-5) == '.json' then
-                
+
                 local pos = file:find('.json', 1, true)
                 local char = file:sub(pos, pos)
 
