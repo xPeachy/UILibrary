@@ -1,5 +1,3 @@
--- // [ Linoria Edit Lib ]
-
 if game:GetService("CoreGui"):FindFirstChild("Shadow") then
     game:GetService("CoreGui"):FindFirstChild("Shadow"):Destroy()
 end
