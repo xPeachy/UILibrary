@@ -4,7 +4,7 @@ local ThemeManager = {} do
 
     ThemeManager.Library = nil
     ThemeManager.BuiltInThemes = {
-        ['Shadow Hub'] = { 1, httpService:JSONDecode('{"FontColor":"ffffff","MainColor":"191925","AccentColor":"6759b3","BackgroundColor":"16161f","OutlineColor":"323232"}') },
+        ['Shadow Hub'] = { 1, httpService:JSONDecode('{"MainColor":"000000","AccentColor":"eaffa7","OutlineColor":"323232","BackgroundColor":"020202","FontColor":"ffffff"}') },
     }
 
     function ThemeManager:ApplyTheme(theme)
